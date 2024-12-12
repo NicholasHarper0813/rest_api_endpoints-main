@@ -1,38 +1,12 @@
-<?php
-/**
- * Register Get Single Post Api
- *
- * Get post by id.
- *
- * @package REST API ENDPOINTS
- */
-
+<?php 
 class Rae_Register_Get_Post_Api {
-
-	/**
-	 * Constructor
-	 */
 	public function __construct() {
 		$this->post_type     = 'post';
 		$this->route         = '/post';
-
 		add_action( 'rest_api_init', [ $this, 'rest_posts_endpoints' ] );
 	}
-
-	/**
-	 * Register posts endpoints.
-	 */
+	
 	public function rest_posts_endpoints() {
-
-		/**
-		 * Handle Posts Request: GET Request
-		 *
-		 * This endpoint takes 'page_no' in query params of the request.
-		 * Returns the posts data object on success
-		 * Also handles error by returning the relevant error.
-		 *
-		 * Example: http://example.com/wp-json/rae/v1/post?post_id=1
-		 */
 		register_rest_route(
 			'rae/v1',
 			$this->route,
@@ -43,56 +17,37 @@ class Rae_Register_Get_Post_Api {
 		);
 	}
 
-	/**
-	 * Get posts call back.
-	 *
-	 * Returns the posts data object on success
-	 *
-	 * @param WP_REST_Request $request request object.
-	 *
-	 * @return WP_Error|WP_REST_Response response object.
-	 */
-	public function rest_endpoint_handler( WP_REST_Request $request ) {
+	public function rest_endpoint_handler( WP_REST_Request $request ) 
+	{
 		$response      = [];
 		$parameters    = $request->get_params();
 		$post_id = ! empty( $parameters['post_id'] ) ? intval( sanitize_text_field( $parameters['post_id'] ) ) : '';
-
-		// Error Handling.
 		$error = new WP_Error();
-
 		$post_data = $this->get_required_post_data( $post_id );
 
-		// If posts found.
-		if ( ! empty( $post_data ) ) {
+		if ( ! empty( $post_data ) ) 
+		{
 
 			$response['status']      = 200;
 			$response['post_data']  = $post_data;
 
-		} else {
-
-			// If the posts not found.
+		} 
+		else 
+		{
 			$error->add( 406, __( 'Post not found', 'rest-api-endpoints' ) );
-
 			return $error;
-
 		}
 
 		return new WP_REST_Response( $response );
-
 	}
 
-	/**
-	 * Construct a post data that contains, title, excerpt and featured image.
-	 *
-	 * @param {array} $post_ID post id.
-	 *
-	 * @return array
-	 */
-	public function get_required_post_data( $post_ID ) {
+	public function get_required_post_data( $post_ID )
+	{
 
 		$post_data = [];
 
-		if ( empty( $post_ID ) && ! is_array( $post_ID ) ) {
+		if ( empty( $post_ID ) && ! is_array( $post_ID ) ) 
+		{
 			return $post_data;
 		}
 
