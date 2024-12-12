@@ -7,21 +7,8 @@ class Rae_Register_Get_Posts_Api {
 
 		add_action( 'rest_api_init', [ $this, 'rest_posts_endpoints' ] );
 	}
-
-	/**
-	 * Register posts endpoints.
-	 */
+	
 	public function rest_posts_endpoints() {
-
-		/**
-		 * Handle Posts Request: GET Request
-		 *
-		 * This endpoint takes 'page_no' in query params of the request.
-		 * Returns the posts data object on success
-		 * Also handles error by returning the relevant error.
-		 *
-		 * Example: http://example.com/wp-json/rae/v1/posts?page_no=1
-		 */
 		register_rest_route(
 			'rae/v1',
 			$this->route,
@@ -32,68 +19,37 @@ class Rae_Register_Get_Posts_Api {
 		);
 	}
 
-	/**
-	 * Get posts call back.
-	 *
-	 * Returns the posts data object on success
-	 *
-	 * @param WP_REST_Request $request request object.
-	 *
-	 * @return WP_Error|WP_REST_Response response object.
-	 */
 	public function rest_endpoint_handler( WP_REST_Request $request ) {
 		$response      = [];
 		$parameters    = $request->get_params();
 		$posts_page_no = ! empty( $parameters['page_no'] ) ? intval( sanitize_text_field( $parameters['page_no'] ) ) : '';
-
-		// Error Handling.
 		$error = new WP_Error();
-
 		$posts_data = $this->get_posts( $posts_page_no );
-
-		// If posts found.
-		if ( ! empty( $posts_data['posts_data'] ) ) {
+		
+		if ( ! empty( $posts_data['posts_data'] ) ) 
+		{
 
 			$response['status']      = 200;
 			$response['posts_data']  = $posts_data['posts_data'];
 			$response['found_posts'] = $posts_data['found_posts'];
 			$response['page_count']  = $posts_data['page_count'];
 
-		} else {
-
-			// If the posts not found.
+		} 
+		else 
+		{
 			$error->add( 406, __( 'Posts not found', 'rest-api-endpoints' ) );
-
 			return $error;
-
 		}
 
 		return new WP_REST_Response( $response );
 
 	}
-
-	/**
-	 * Calculate page count.
-	 *
-	 * @param int $total_found_posts Total posts found.
-	 * @param int $post_per_page     Post per page count.
-	 *
-	 * @return int
-	 */
+	
 	public function calculate_page_count( $total_found_posts, $post_per_page ) {
 		return ( (int) ( $total_found_posts / $post_per_page ) + ( ( $total_found_posts % $post_per_page ) ? 1 : 0 ) );
 	}
 
-
-	/**
-	 * Get posts data.
-	 *
-	 * @param integer $page_no page no.
-	 *
-	 * @return array Posts.
-	 */
 	public function get_posts( $page_no = 1 ) {
-
 		$args = [
 			'post_type'              => $this->post_type,
 			'post_status'            => 'publish',
@@ -107,7 +63,6 @@ class Rae_Register_Get_Posts_Api {
 		];
 
 		$latest_post_ids = new WP_Query( $args );
-
 		$post_result = $this->get_required_posts_data( $latest_post_ids->posts );
 		$found_posts = $latest_post_ids->found_posts;
 		$page_count  = $this->calculate_page_count( $found_posts, $this->post_per_page );
@@ -120,26 +75,19 @@ class Rae_Register_Get_Posts_Api {
 		];
 	}
 
-	/**
-	 * Construct a post array that contains, title, excerpt and featured image.
-	 *
-	 * @param {array} $post_IDs post ids.
-	 *
-	 * @return array
-	 */
-	public function get_required_posts_data( $post_IDs ) {
-
+	public function get_required_posts_data( $post_IDs ) 
+	{
 		$post_result = [];
-
-		if ( empty( $post_IDs ) && ! is_array( $post_IDs ) ) {
+		if ( empty( $post_IDs ) && ! is_array( $post_IDs ) ) 
+		{
 			return $post_result;
 		}
 
-		foreach ( $post_IDs as $post_ID ) {
+		foreach ( $post_IDs as $post_ID ) 
+		{
 
 			$author_id     = get_post_field( 'post_author', $post_ID );
 			$attachment_id = get_post_thumbnail_id( $post_ID );
-
 			$post_data                     = [];
 			$post_data['id']               = $post_ID;
 			$post_data['title']            = get_the_title( $post_ID );
@@ -155,9 +103,7 @@ class Rae_Register_Get_Posts_Api {
 				'author_id'   => $author_id,
 				'author_name' => get_the_author_meta( 'display_name', $author_id )
 			];
-
 			array_push( $post_result, $post_data );
-
 		}
 
 		return $post_result;
