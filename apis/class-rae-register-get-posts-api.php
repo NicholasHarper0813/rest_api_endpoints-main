@@ -1,15 +1,5 @@
 <?php
-/**
- * Register Get Posts Api
- *
- * @package REST API ENDPOINTS
- */
-
 class Rae_Register_Get_Posts_Api {
-
-	/**
-	 * Constructor
-	 */
 	public function __construct() {
 		$this->post_type     = 'post';
 		$this->route         = '/posts';
