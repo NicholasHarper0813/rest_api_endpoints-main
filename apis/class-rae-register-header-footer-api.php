@@ -26,13 +26,12 @@ class Rae_Register_Header_Footer_Api
 		$header_menu_location_id   = ! empty( $parameters['header_location_id'] ) ? sanitize_text_field( $parameters['header_location_id'] ) : '';
 		$footer_menu_location_id   = ! empty( $parameters['footer_location_id'] ) ? sanitize_text_field( $parameters['footer_location_id'] ) : '';
 
-		// Error Handling.
 		$error = new WP_Error();
 
 		$header_menu_items = $this->get_nav_menu_items( $header_menu_location_id );
 		$footer_menu_items = $this->get_nav_menu_items( $footer_menu_location_id );
 
-		if ( ! empty( $header_menu_items ) || ! empty( $footer_menu_items ) ) 
+		if (!empty( $header_menu_items ) || !empty( $footer_menu_items )) 
 		{
 			$response['status']    = 200;
 			$response['data'] = [
@@ -78,7 +77,7 @@ class Rae_Register_Header_Footer_Api
 		foreach ( $social_icons_name as $social_icon_name )
 		{
 			$social_link = get_theme_mod( sprintf( 'rae_%s_link', $social_icon_name ) );
-			if ( $social_link ) 
+			if ($social_link) 
 			{
 				array_push( $social_icons, [
 					'iconName' =>esc_attr( $social_icon_name ),
@@ -98,7 +97,8 @@ class Rae_Register_Header_Footer_Api
 
 	function get_nav_menu_items( $location, $args = [] ) 
 	{
-		if ( empty( $location ) ) {
+		if (empty($location))
+		{
 			return '';
 		}
 
@@ -107,7 +107,7 @@ class Rae_Register_Header_Footer_Api
 		$menu_data = wp_get_nav_menu_items( $object->name, $args );
 		$menu_items = [];
 
-		if ( ! empty( $menu_data ) ) 
+		if ( !empty($menu_data) ) 
 		{
 			foreach ( $menu_data as $item ) 
 			{
@@ -131,8 +131,8 @@ class Rae_Register_Header_Footer_Api
 				{
 					$submenu_item              = [];
 					$submenu_item['ID']        = $item->ID;
-					$submenu_item['title']     = $item->title;
 					$submenu_item['url']       = $item->url;
+					$submenu_item['title']     = $item->title;
 					$submenu_item['pageSlug'] = get_post_field( 'post_name', $item->object_id );
 					$submenu_item['pageID']   = intval( $item->object_id );
 
@@ -154,7 +154,6 @@ class Rae_Register_Header_Footer_Api
 	public function get_sidebar( $sidebar_id )
 	{
 		ob_start();
-
 		dynamic_sidebar(  );
 		$output = ob_get_contents( $sidebar_id );
 		ob_end_clean();
