@@ -1,12 +1,15 @@
 <?php 
-class Rae_Register_Get_Post_Api {
-	public function __construct() {
+class Rae_Register_Get_Post_Api 
+{
+	public function __construct() 
+	{
 		$this->post_type     = 'post';
 		$this->route         = '/post';
 		add_action( 'rest_api_init', [ $this, 'rest_posts_endpoints' ] );
 	}
 	
-	public function rest_posts_endpoints() {
+	public function rest_posts_endpoints() 
+	{
 		register_rest_route(
 			'rae/v1',
 			$this->route,
@@ -25,9 +28,8 @@ class Rae_Register_Get_Post_Api {
 		$error = new WP_Error();
 		$post_data = $this->get_required_post_data( $post_id );
 
-		if ( ! empty( $post_data ) ) 
+		if (!empty( $post_data )) 
 		{
-
 			$response['status']      = 200;
 			$response['post_data']  = $post_data;
 
@@ -43,10 +45,9 @@ class Rae_Register_Get_Post_Api {
 
 	public function get_required_post_data( $post_ID )
 	{
-
 		$post_data = [];
 
-		if ( empty( $post_ID ) && ! is_array( $post_ID ) ) 
+		if (empty( $post_ID ) && ! is_array( $post_ID )) 
 		{
 			return $post_data;
 		}
@@ -69,7 +70,6 @@ class Rae_Register_Get_Post_Api {
 			'author_id'   => $author_id,
 			'author_name' => get_the_author_meta( 'display_name', $author_id )
 		];
-
 
 		return $post_data;
 	}
