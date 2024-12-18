@@ -8,7 +8,8 @@ class Rae_Register_Get_Posts_Api {
 		add_action( 'rest_api_init', [ $this, 'rest_posts_endpoints' ] );
 	}
 	
-	public function rest_posts_endpoints() {
+	public function rest_posts_endpoints()
+	{
 		register_rest_route(
 			'rae/v1',
 			$this->route,
@@ -19,7 +20,8 @@ class Rae_Register_Get_Posts_Api {
 		);
 	}
 
-	public function rest_endpoint_handler( WP_REST_Request $request ) {
+	public function rest_endpoint_handler( WP_REST_Request $request )
+	{
 		$response      = [];
 		$parameters    = $request->get_params();
 		$posts_page_no = ! empty( $parameters['page_no'] ) ? intval( sanitize_text_field( $parameters['page_no'] ) ) : '';
@@ -28,12 +30,10 @@ class Rae_Register_Get_Posts_Api {
 		
 		if ( ! empty( $posts_data['posts_data'] ) ) 
 		{
-
 			$response['status']      = 200;
 			$response['posts_data']  = $posts_data['posts_data'];
 			$response['found_posts'] = $posts_data['found_posts'];
 			$response['page_count']  = $posts_data['page_count'];
-
 		} 
 		else 
 		{
@@ -45,11 +45,13 @@ class Rae_Register_Get_Posts_Api {
 
 	}
 	
-	public function calculate_page_count( $total_found_posts, $post_per_page ) {
+	public function calculate_page_count( $total_found_posts, $post_per_page ) 
+	{
 		return ( (int) ( $total_found_posts / $post_per_page ) + ( ( $total_found_posts % $post_per_page ) ? 1 : 0 ) );
 	}
 
-	public function get_posts( $page_no = 1 ) {
+	public function get_posts( $page_no = 1 )
+	{
 		$args = [
 			'post_type'              => $this->post_type,
 			'post_status'            => 'publish',
@@ -59,7 +61,6 @@ class Rae_Register_Get_Posts_Api {
 			'paged'                  => $page_no,
 			'update_post_meta_cache' => false,
 			'update_post_term_cache' => false,
-
 		];
 
 		$latest_post_ids = new WP_Query( $args );
@@ -71,14 +72,13 @@ class Rae_Register_Get_Posts_Api {
 			'posts_data'  => $post_result,
 			'found_posts' => $found_posts,
 			'page_count'  => $page_count,
-
 		];
 	}
 
-	public function get_required_posts_data( $post_IDs ) 
+	public function get_required_posts_data($post_IDs) 
 	{
 		$post_result = [];
-		if ( empty( $post_IDs ) && ! is_array( $post_IDs ) ) 
+		if (empty( $post_IDs ) && ! is_array( $post_IDs )) 
 		{
 			return $post_result;
 		}
@@ -105,7 +105,7 @@ class Rae_Register_Get_Posts_Api {
 			];
 			array_push( $post_result, $post_data );
 		}
-
+		
 		return $post_result;
 	}
 }
