@@ -1,14 +1,6 @@
-<?php
-/**
- * Custom Functions
- *
- * @package REST API ENDPOINTS
- */
-
-/**
- * Register Menus.
- */
-function rae_custom_new_menu() {
+<?php 
+function rae_custom_new_menu()
+{
 	register_nav_menus( [
 		'rwt-menu-header' => esc_html__( 'RWT Header Menu', 'rest-api-endpoints' ),
 		'rwt-menu-footer' => esc_html__( 'RWT Footer Menu', 'rest-api-endpoints' ),
@@ -16,18 +8,8 @@ function rae_custom_new_menu() {
 }
 add_action( 'init', 'rae_custom_new_menu' );
 
-/**
- * Register Sidebar
- */
-
-/**
- * Register widget areas.
- *
- * @link https://developer.wordpress.org/themes/functionality/sidebars/#registering-a-sidebar
- */
-function rae_sidebar_registration() {
-
-	// Arguments used in all register_sidebar() calls.
+function rae_sidebar_registration() 
+{
 	$shared_args = [
 		'before_title'  => '<h2 class="widget-title subheading heading-size-3">',
 		'after_title'   => '</h2>',
@@ -35,7 +17,6 @@ function rae_sidebar_registration() {
 		'after_widget'  => '</div></div>',
 	];
 
-	// Footer #1.
 	register_sidebar(
 		array_merge(
 			$shared_args,
@@ -47,7 +28,6 @@ function rae_sidebar_registration() {
 		)
 	);
 
-	// Footer #2.
 	register_sidebar(
 		array_merge(
 			$shared_args,
@@ -58,13 +38,13 @@ function rae_sidebar_registration() {
 			]
 		)
 	);
-
 }
 
 add_action( 'widgets_init', 'rae_sidebar_registration' );
 
 
-if ( function_exists( 'register_sidebar' ) ) {
+if ( function_exists( 'register_sidebar' ) )
+{
 	register_sidebar();
 }
 
