@@ -1,50 +1,25 @@
-<?php
-/**
- * Customizer settings.
- *
- * @package REST API ENDPOINTS
- */
-
-/**
- * Class Rae_Customizer
- */
-class Rae_Customizer {
-
-	/**
-	 * Construct method.
-	 */
-	function __construct() {
+<?php 
+class Rae_Customizer 
+{
+	function __construct() 
+	{
 		$this->_setup_hooks();
 	}
 
-	/**
-	 * To register action/filter.
-	 *
-	 * @return void
-	 */
-	function _setup_hooks() {
-		/**
-		 * Actions
-		 */
+	function _setup_hooks() 
+	{
 		add_action( 'customize_register', [ $this, 'customize_register' ] );
 	}
-
-	/**
-	 * Customize register.
-	 *
-	 * @param \WP_Customize_Manager $wp_customize Theme Customizer object.
-	 *
-	 * @action customize_register
-	 */
-	public function customize_register( \WP_Customize_Manager $wp_customize ) {
-
+	
+	public function customize_register( \WP_Customize_Manager $wp_customize ) 
+	{
 		$this->social_icon_section( $wp_customize );
 		$this->footer_section( $wp_customize );
 
 	}
 
-	public function footer_section( $wp_customize ) {
-
+	public function footer_section( $wp_customize ) 
+	{
 		$wp_customize->add_section(
 			'rae_footer',
 			[
@@ -75,14 +50,8 @@ class Rae_Customizer {
 		);
 	}
 
-	/**
-	 * Add social icon section.
-	 *
-	 * @param $wp_customize
-	 */
-	public function social_icon_section( $wp_customize  ) {
-
-		// Social Icons
+	public function social_icon_section( $wp_customize  ) 
+	{
 		$social_icons = [ 'facebook', 'twitter', 'instagram', 'youtube' ];
 
 		$wp_customize->add_section(
@@ -93,10 +62,9 @@ class Rae_Customizer {
 			]
 		);
 
-		foreach ( $social_icons as $social_icon ) {
-
+		foreach ( $social_icons as $social_icon )
+		{
 			$setting_id = sprintf( 'rae_%s_link', $social_icon );
-
 			$wp_customize->add_setting(
 				$setting_id,
 				[
