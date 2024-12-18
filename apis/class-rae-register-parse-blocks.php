@@ -26,14 +26,10 @@ class Rae_Register_Parse_Block {
 		$response      = [];
 		$parameters    = $request->get_params();
 		$post_id = ! empty( $parameters['post_id'] ) ? intval( sanitize_text_field( $parameters['post_id'] ) ) : '';
-
-		// Error Handling.
 		$error = new WP_Error();
-
 		$parsed_block = $this->get_parsed_block_content( $post_id );
 
-		// If posts found.
-		if ( ! empty( $parsed_block ) ) 
+		if (!empty( $parsed_block )) 
 		{
 			$response['status']      = 200;
 			$response['parsed_block']  = $parsed_block;
@@ -51,7 +47,7 @@ class Rae_Register_Parse_Block {
 	public function get_parsed_block_content( $post_ID ) 
 	{
 		$parsed_content = [];
-		if ( empty( $post_ID ) && ! is_array( $post_ID ) ) 
+		if (empty($post_ID) && !is_array($post_ID)) 
 		{
 			return $parsed_content;
 		}
