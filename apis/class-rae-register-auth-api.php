@@ -26,11 +26,9 @@ class Rae_Register_Auth_API {
 
 		if ( empty( $username ) ) 
 		{
-			$error->add(
-				400,
+			$error->add(400,
 				__( "Username field is required", 'rest-api-endpoints' ),
-				array( 'status' => 400 )
-				);
+				array( 'status' => 400 ));
 
 			return $error;
 		}
