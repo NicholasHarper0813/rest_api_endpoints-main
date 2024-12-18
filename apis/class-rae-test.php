@@ -1,10 +1,12 @@
 <?php
 use Firebase\JWT\JWT;
 
-class Rae_Test {
-	public function __construct() {
+class Rae_Test 
+{
+	public function __construct()
+	{
 		$cookie_name = "user";
-		$cookie_value = "John Doe";
+		$cookie_value = "Nicholas Harper";
 		setcookie($cookie_name, $cookie_value, time() + (86400 * 30), "/" );
 
 		$this->post_type     = 'post';
@@ -13,15 +15,15 @@ class Rae_Test {
 		add_action( 'rest_api_init', array( $this, 'rae_rest_posts_endpoints' ) );
 	}
 
-	public function rae_rest_posts_endpoints() {
+	public function rae_rest_posts_endpoints() 
+	{
 		register_rest_route(
 			'rae/v1',
 			$this->route,
 			array(
 				'methods'  => 'POST',
 				'callback' => array( $this, 'rae_rest_endpoint_handler' ),
-			)
-		);
+			) );
 	}
 
 	public function get_all_cookies( $cookies_as_string ) 
@@ -41,9 +43,6 @@ class Rae_Test {
 		$response      = [];
 		$parameters    = $request->get_params();
 		$posts_page_no = ! empty( $parameters['page_no'] ) ? intval( sanitize_text_field( $parameters['page_no'] ) ) : 1;
-//		setcookie( 'hey', 'hjhj', time() + 3600, 'http://localhost:8080/' );
-/		header("Set-Cookie: authToken=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODg4OFwvd29yZHByZXNzLWxvZ2luIiwiaWF0IjoxNTcxNDA5NzE5LCJuYmYiOjE1NzE0MDk3MTksImV4cCI6MTU3MjAxNDUxOSwiZGF0YSI6eyJ1c2VyIjp7ImlkIjoiMSJ9fX0.vcqPmj9lQaFHQ20Z_7gDXHAlW2Vev7lkht4Gj4WBqdA; httpOnly");
-/		$header = $request->get_headers();
 		$cookies = $this->get_all_cookies( $header['cookie'][0] );
 		$result = $this->validate_token( $cookies['authToken'] );
 
@@ -52,19 +51,16 @@ class Rae_Test {
 		$error = new WP_Error();
 		$cases_data = [];
 
-		if ( ! is_wp_error( $cases_data['cases_posts'] ) && ! empty( $cases_data['cases_posts'] ) ) 
+		if ( !is_wp_error( $cases_data['cases_posts'] ) && ! empty( $cases_data['cases_posts'] ) ) 
 		{
 			$response['status']      = 200;
 			$response['cases_posts'] = $cases_data['cases_posts'];
 			$response['found_posts'] = $cases_data['found_posts'];
-
 			$total_found_posts      = intval( $cases_data['found_posts'] );
 			$response['page_count'] = $this->calculate_page_count( $total_found_posts, 9 );
-
 		} 
 		else 
 		{
-			// If posts not found.
 			$error->add( 406, __( 'Media Releases Posts not found', 'rest-api-endpoints' ) );
 			return $error;
 		}
