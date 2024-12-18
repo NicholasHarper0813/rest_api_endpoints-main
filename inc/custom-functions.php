@@ -42,7 +42,6 @@ function rae_sidebar_registration()
 
 add_action( 'widgets_init', 'rae_sidebar_registration' );
 
-
 if ( function_exists( 'register_sidebar' ) )
 {
 	register_sidebar();
